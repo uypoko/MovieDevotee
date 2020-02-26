@@ -17,6 +17,7 @@ import RealmSwift
     
     dynamic var id: String = UUID().uuidString
     dynamic var title: String = ""
-    dynamic var year: MovieType = .movie
+    dynamic var type: MovieType = .movie
+    dynamic var year: String = ""
     dynamic var posterURLString: String = ""
 }

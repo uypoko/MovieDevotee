@@ -9,6 +9,6 @@
 import RxSwift
 
 protocol MovieSearchHistoryRepository {
-    func readMovieSearchHistory() -> Single<[Movie]?>
+    func readMovieSearchHistory() -> Single<[Movie]>
     func saveMovieToSearchHistory(movie: Movie) -> Completable
 }
