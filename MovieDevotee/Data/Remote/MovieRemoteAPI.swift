@@ -6,22 +6,22 @@
 //  Copyright © 2020 Daylighter. All rights reserved.
 //
 
+import Foundation
 import Alamofire
 import SwiftyJSON
 import RxSwift
 
 class MovieRemoteAPI {
     
-    let apiKey = "77dd85e9"
-    let baseURLString = "http://www.omdbapi.com"
+    private let apiKey = "77dd85e9"
+    private let baseURLString = "http://www.omdbapi.com"
     
-    func fetchMovies(for keyword: String) -> Single<[Movie]> {
+    func fetchMovies(by keyword: String) -> Single<[GeneralMovie]> {
         return Single.create { [weak self] single in
             let disposables = Disposables.create()
             guard let self = self else { return disposables }
             
             let params = ["apikey": self.apiKey, "s": keyword]
-            print("params \(params)")
             
             AF.request(self.baseURLString, parameters: params)
                 .responseJSON { response in
@@ -31,7 +31,7 @@ class MovieRemoteAPI {
                         let arrayJson = originalJson["Search"].arrayValue
                         //debugPrint(arrayJson)
                         
-                        var movies: [Movie] = []
+                        var movies: [GeneralMovie] = []
                         for movieJson in arrayJson {
                             let id = movieJson["imdbID"].stringValue
                             let title = movieJson["Title"].stringValue
@@ -39,10 +39,10 @@ class MovieRemoteAPI {
                             let posterURL = movieJson["Poster"].stringValue
                             let year = movieJson["Year"].stringValue
                             
-                            let movie = Movie()
+                            let movie = GeneralMovie()
                             movie.id = id
                             movie.title = title
-                            movie.type = Movie.MovieType(rawValue: type) ?? .movie
+                            movie.type = GeneralMovie.MovieType(rawValue: type) ?? .movie
                             movie.posterURLString = posterURL
                             movie.year = year
                             
@@ -58,4 +58,53 @@ class MovieRemoteAPI {
             return disposables
         }
     }
+    
+    func fetchDetailMovie(by id: String) -> Single<DetailedMovie> {
+        return Single.create { [weak self] single in
+            let disposables = Disposables.create()
+            guard let self = self else { return disposables }
+            
+            let params = ["apikey": self.apiKey, "i": id]
+            
+            AF.request(self.baseURLString, parameters: params)
+                .responseJSON { response in
+                    
+                    switch response.result {
+                    case .success(let data):
+                        let movieJSON = JSON(data)
+                        let title = movieJSON["Title"].stringValue
+                        let year = movieJSON["Year"].stringValue
+                        let rated = movieJSON["Rated"].stringValue
+                        let length = movieJSON["Runtime"].stringValue
+                        let genreString = movieJSON["Genre"].stringValue
+                        let genreArray = genreString.components(separatedBy: ", ")
+                        let director = movieJSON["David Fincher"].stringValue
+                        let posterURL = movieJSON["Poster"].stringValue
+                        let castString = movieJSON["Actors"].stringValue
+                        let castArray = castString.components(separatedBy: ", ")
+                        let plot = movieJSON["Plot"].stringValue
+                        
+                        let movie = DetailedMovie(
+                            id: id,
+                            title: title,
+                            year: year,
+                            rated: rated,
+                            length: length,
+                            genre: genreArray,
+                            director: director,
+                            posterURLString: posterURL,
+                            cast: castArray,
+                            plot: plot
+                        )
+                        
+                        single(.success(movie))
+                    case .failure(let error):
+                        single(.error(error))
+                    }
+            }
+            
+            return disposables
+        }
+    }
+    
 }

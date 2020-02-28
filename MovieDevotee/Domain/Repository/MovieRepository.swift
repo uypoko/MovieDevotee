@@ -10,6 +10,7 @@ import Foundation
 import RxSwift
 
 protocol MovieRepository {
-    func getMovie(by id: String) -> Single<Movie?>
-    func searchForMovies(for keyword: String) -> Single<[Movie]>
+    //func getMovie(by id: String) -> Single<Movie?>
+    func searchForMovies(by keyword: String) -> Single<[GeneralMovie]>
+    func getDetailedMovie(by id: String) -> Single<DetailedMovie>
 }

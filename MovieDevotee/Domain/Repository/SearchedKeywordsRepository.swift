@@ -8,7 +8,7 @@
 
 import RxSwift
 
-protocol SearchedKeywordRepository {
+protocol SearchedKeywordsRepository {
     func readSearchedKeywords() -> Single<[String]>
     func saveSearchedKeyword(keyword: String) -> Completable
 }

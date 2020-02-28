@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-@objcMembers class Movie: Object {
+@objcMembers class GeneralMovie: Object {
     enum MovieType: String {
         case movie
         case series
@@ -20,4 +20,6 @@ import RealmSwift
     dynamic var type: MovieType = .movie
     dynamic var year: String = ""
     dynamic var posterURLString: String = ""
+    
+    var photoData: Data?
 }
