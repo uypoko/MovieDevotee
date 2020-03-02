@@ -1,4 +1,4 @@
-framework module Pods_MovieDevotee {
+module Pods_MovieDevotee {
   umbrella header "Pods-MovieDevotee-umbrella.h"
 
   export *

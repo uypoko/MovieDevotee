@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "75A90E9FD89F65DA8CCA02CA4E4462F5"
-               BuildableName = "MagazineLayout.framework"
+               BuildableName = "libMagazineLayout.a"
                BlueprintName = "MagazineLayout"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>

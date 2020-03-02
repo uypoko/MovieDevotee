@@ -21,5 +21,4 @@ import RealmSwift
     dynamic var year: String = ""
     dynamic var posterURLString: String = ""
     
-    var photoData: Data?
 }

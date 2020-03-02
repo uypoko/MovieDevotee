@@ -22,7 +22,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         let rootVC = appDependencyContainer.constructRootVC()
         let navigationController = appDependencyContainer.navigationController
         navigationController.viewControllers = [rootVC]
-        
+        //navigationController.top
         window = UIWindow(windowScene: scene)
         window?.rootViewController = navigationController
         

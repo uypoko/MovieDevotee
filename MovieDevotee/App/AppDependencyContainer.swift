@@ -8,14 +8,17 @@
 
 import Foundation
 import UIKit
+import RxSwift
 
 class AppDependencyContainer {
     
     let navigationController = UINavigationController()
+    // Long-lived singleton dependencies
+    let utilityPrioritizedConcurrentQueue = ConcurrentDispatchQueueScheduler.init(qos: .utility)
     
     func constructRootVC() -> UIViewController {
-        let homeContainer = HomeDependencyContainer(appDependencyContainer: self)
-        return homeContainer.constructHomeVC()
+        let searchContainer = SearchDependencyContainer(appDependencyContainer: self)
+        return searchContainer.constructSearchVC()
     }
     
 }
