@@ -123,9 +123,9 @@ class SearchViewController: NiblessViewController {
 
 extension SearchViewController: UICollectionViewDelegateMagazineLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeModeForItemAt indexPath: IndexPath) -> MagazineLayoutItemSizeMode {
-        let widthMode = MagazineLayoutItemWidthMode.halfWidth
-        let viewHeight = view.frame.height
-        let heightMode = MagazineLayoutItemHeightMode.static(height: viewHeight / 3)
+        let widthMode = MagazineLayoutItemWidthMode.thirdWidth
+        //let viewHeight = view.frame.height
+        let heightMode = MagazineLayoutItemHeightMode.static(height: 250)
         return MagazineLayoutItemSizeMode(widthMode: widthMode, heightMode: heightMode)
     }
     

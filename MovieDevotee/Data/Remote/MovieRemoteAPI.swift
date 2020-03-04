@@ -76,9 +76,12 @@ class MovieRemoteAPI {
                         let year = movieJSON["Year"].stringValue
                         let rated = movieJSON["Rated"].stringValue
                         let length = movieJSON["Runtime"].stringValue
+                        let releasedDate = movieJSON["Released"].stringValue
                         let genreString = movieJSON["Genre"].stringValue
                         let genreArray = genreString.components(separatedBy: ", ")
-                        let director = movieJSON["David Fincher"].stringValue
+                        let director = movieJSON["Director"].stringValue
+                        let writerString = movieJSON["Writer"].stringValue
+                        let writerArray = writerString.components(separatedBy: ", ")
                         let posterURL = movieJSON["Poster"].stringValue
                         let castString = movieJSON["Actors"].stringValue
                         let castArray = castString.components(separatedBy: ", ")
@@ -90,8 +93,10 @@ class MovieRemoteAPI {
                             year: year,
                             rated: rated,
                             length: length,
+                            releasedDate: releasedDate,
                             genre: genreArray,
                             director: director,
+                            writer: writerArray,
                             posterURLString: posterURL,
                             cast: castArray,
                             plot: plot

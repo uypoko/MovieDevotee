@@ -29,11 +29,12 @@ struct DetailedMovie {
     let year: String
     let rated: String
     let length: String
+    let releasedDate: String
     let genre: [String]
     let director: String
+    let writer: [String]
     let posterURLString: String
     let cast: [String]
     let plot: String
     
-    static let empty = DetailedMovie(id: "", title: "", year: "", rated: "", length: "", genre: [], director: "", posterURLString: "", cast: [], plot: "")
 }

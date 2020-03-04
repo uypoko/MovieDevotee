@@ -41,8 +41,8 @@ class SearchedMovieCollectionViewCell: MagazineLayoutCollectionViewCell {
         titleLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 251), for: .vertical)
         additionalInforLabel.setContentHuggingPriority(UILayoutPriority(rawValue: 251), for: .vertical)
         
-        //titleLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
-        //additionalInforLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
+        titleLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
+        additionalInforLabel.setContentCompressionResistancePriority(UILayoutPriority(rawValue: 1000), for: .vertical)
         
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
