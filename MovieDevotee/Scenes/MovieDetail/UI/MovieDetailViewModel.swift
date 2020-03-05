@@ -12,7 +12,7 @@ import RxSwift
 class MovieDetailViewModel {
     
     // MARK: Outputs
-    let posterPhotoDataSubject: PublishSubject<Data> = PublishSubject()
+    let posterURLSubject: BehaviorSubject<String> = BehaviorSubject(value: "")
     let titleSubject: BehaviorSubject<String> = BehaviorSubject(value: "")
     let yearSubject: BehaviorSubject<String> = BehaviorSubject(value: "")
     let ratedSubject: BehaviorSubject<String> = BehaviorSubject(value: "")
@@ -30,26 +30,31 @@ class MovieDetailViewModel {
     private let movieId: String
     private let movieRepository: MovieRepository
     private let dataRepository: DataRepository
+    private let utilityPrioritizedConcurrentQueue: ConcurrentDispatchQueueScheduler
     
     private let disposeBag = DisposeBag()
     
-    init(movieId: String, movieRepository: MovieRepository, dataRepository: DataRepository) {
+    init(movieId: String,
+         movieRepository: MovieRepository,
+         dataRepository: DataRepository,
+         utilityPrioritizedConcurrentQueue: ConcurrentDispatchQueueScheduler) {
         self.movieId = movieId
         self.movieRepository = movieRepository
         self.dataRepository = dataRepository
+        self.utilityPrioritizedConcurrentQueue = utilityPrioritizedConcurrentQueue
         
         getMovie()
     }
     
     private func getMovie() {
         movieRepository.getDetailedMovie(by: movieId)
-        //.subscribeOn()
+            .subscribeOn(utilityPrioritizedConcurrentQueue)
             .subscribe(
                 onSuccess: { [weak self] movie in
                     guard let self = self else { return }
                     
                     self.activityIndicatorAnimating.onNext(false)
-                    self.getPosterPhotoData(urlString: movie.posterURLString)
+                    self.posterURLSubject.onNext(movie.posterURLString)
                     self.titleSubject.onNext(movie.title)
                     self.yearSubject.onNext(movie.year)
                     self.ratedSubject.onNext(movie.rated)
@@ -65,22 +70,4 @@ class MovieDetailViewModel {
             .disposed(by: disposeBag)
     }
     
-    private func getPosterPhotoData(urlString: String) {
-        activityIndicatorAnimating.onNext(true)
-        
-        dataRepository.getData(urlString: urlString)
-            .subscribe(
-                onSuccess: { [weak self]  data in
-                    guard let self = self else { return }
-                    
-                    self.activityIndicatorAnimating.onNext(false)
-                    self.posterPhotoDataSubject.onNext(data)
-                }
-            )
-            .disposed(by: disposeBag)
-    }
-    
-    deinit {
-        print("Detail ViewModel deinit")
-    }
 }

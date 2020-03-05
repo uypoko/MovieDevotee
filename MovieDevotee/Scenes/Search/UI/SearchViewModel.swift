@@ -13,6 +13,7 @@ class SearchViewModel {
     // MARK: Outputs
     let moviesSubject: BehaviorSubject<[GeneralMovie]> = BehaviorSubject(value: [])
     let errorMessagesSubject: PublishSubject<String> = PublishSubject()
+    let activityIndicatorAnimating: BehaviorSubject<Bool> = BehaviorSubject(value: false)
     
     // MARK: Inputs
     let searchedKeywordSubject: PublishSubject<String> = PublishSubject()
@@ -20,50 +21,24 @@ class SearchViewModel {
     
     // MARK: Private properties
     private let movieRepository: MovieRepository
-    private let dataRepository: DataRepository
+    private let recentlyViewedMoviesRepository: RecentlyViewedMoviesRepository
     private let navigator: SearchNavigationDelegate
     private let utilityPrioritizedConcurrentQueue: ConcurrentDispatchQueueScheduler
     
     private let disposeBag = DisposeBag()
     
     init(movieRepository: MovieRepository,
-         dataRepository: DataRepository,
+         recentlyViewedMoviesRepository: RecentlyViewedMoviesRepository,
          navigator: SearchNavigationDelegate,
          utilityPrioritizedConcurrentQueue: ConcurrentDispatchQueueScheduler) {
         self.movieRepository = movieRepository
-        self.dataRepository = dataRepository
+        self.recentlyViewedMoviesRepository = recentlyViewedMoviesRepository
         self.navigator = navigator
         self.utilityPrioritizedConcurrentQueue = utilityPrioritizedConcurrentQueue
         
         performSearchRequestOnEditing()
         performSearchRequestOnButtonTapped()
     }
-    /*
-    func getMovieStream() -> Observable<[GeneralMovie]> {
-        return searchedKeywordSubject
-        .debounce(RxTimeInterval.milliseconds(2000), scheduler: MainScheduler.instance)
-        .distinctUntilChanged()
-        .flatMapLatest { keyword in
-            return self.movieRepository.searchForMovies(by: keyword)
-        }
-        .flatMapLatest { movieList in
-            Observable.from(movieList)
-                .concatMap { movie in
-                    return self.dataRepository.getData(urlString: movie.posterURLString)
-                        .map { (data: Data) in
-                            movie.photoData = data
-                            return 1
-                        }
-                }
-                .buffer(timeSpan: 4, count: 2, scheduler: MainScheduler.instance)
-                .map { (what: [Int]) in
-                    // return modified list of movie for ui update
-                    print(movieList.map {$0.id})
-                    return movieList
-                }
-        }
-    }
-    */
     
     private func performSearchRequestOnEditing() {
         // Observe current search text
@@ -100,43 +75,31 @@ class SearchViewModel {
     }
     
     private func search(by keyword: String) {
+        activityIndicatorAnimating.onNext(true)
+        
         movieRepository.searchForMovies(by: keyword)
             .subscribe(
                 onSuccess: { [weak self] movies in
                     guard let self = self else { return }
                     
+                    self.activityIndicatorAnimating.onNext(false)
                     self.moviesSubject.onNext(movies)
-                    //self.getDataForPhotos(movies: movies)
                 },
                 onError: { [weak self] error in
                     guard let self = self else { return }
                     
+                    self.activityIndicatorAnimating.onNext(false)
                     self.errorMessagesSubject.onNext(error.localizedDescription)
                 }
             )
             .disposed(by: disposeBag)
     }
-    /*
-    private func getDataForPhotos(movies: [GeneralMovie]) {
-        for (index, movie) in movies.enumerated() {
-            dataRepository.getData(urlString: movie.posterURLString)
-                .subscribe(
-                    onSuccess: { [weak self] data in
-                        guard let self = self else { return }
-                        movies[index].photoData = data
-                        self.moviesSubject.onNext(movies)
-                    }
-                )
-                .disposed(by: disposeBag)
-            
-        }
-    }
-    */
     
     // MARK: Public functions
     
-    func goToMovieDetail(movieId: String) {
-        navigator.pushToMovieDetail(movieId: movieId)
+    func goToMovieDetail(movie: GeneralMovie) {
+        recentlyViewedMoviesRepository.saveMovieToRecentlyViewed(movie: movie)
+        navigator.pushToMovieDetail(movieId: movie.id)
     }
     
 }

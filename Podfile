@@ -18,4 +18,6 @@ target 'MovieDevotee' do
   pod 'SDWebImage', '~> 5.0'
   
   pod 'RealmSwift', '4.3.2'
+  
+  pod "RxRealm", '2.0'
 end

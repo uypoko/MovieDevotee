@@ -14,6 +14,9 @@ import RxCocoa
 class SearchViewController: NiblessViewController {
     
     //MARK: UI Controls
+    private lazy var activityIndicator: UIActivityIndicatorView = {
+        return uiviewFactory.makeWhiteLargeIndicator()
+    }()
     
     private lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
@@ -28,7 +31,7 @@ class SearchViewController: NiblessViewController {
         let layout = MagazineLayout()
         let collectionView = MagazineCollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.isPrefetchingEnabled = false
-        collectionView.backgroundColor = .black
+        collectionView.backgroundColor = .darkThemeColor
         collectionView.contentInsetAdjustmentBehavior = .automatic
         collectionView.autoresizesSubviews = false
         
@@ -59,19 +62,21 @@ class SearchViewController: NiblessViewController {
     
     private func setupInitialViews() {
         navigationItem.titleView = searchBar
+        view.addSubview(activityIndicator)
         view.addSubview(movieCollectionView)
         
         movieCollectionView.translatesAutoresizingMaskIntoConstraints = false
         
         movieCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         movieCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        movieCollectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        movieCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         movieCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
 
         movieCollectionView.register(SearchedMovieCollectionViewCell.self, forCellWithReuseIdentifier: SearchedMovieCollectionViewCell.description())
         
         movieCollectionView.rx.setDelegate(self).disposed(by: disposeBag)
         
+        activityIndicator.center = view.center
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -96,6 +101,15 @@ class SearchViewController: NiblessViewController {
             }
             .disposed(by: disposeBag)
         
+        let activityIndicatorAnimating = viewModel.activityIndicatorAnimating.asDriver(onErrorJustReturn: false)
+        
+        activityIndicatorAnimating
+            .drive(activityIndicator.rx.isAnimating)
+            .disposed(by: disposeBag)
+        
+        activityIndicatorAnimating
+            .drive(movieCollectionView.rx.isHidden)
+            .disposed(by: disposeBag)
     }
     
     private func bindToViewModel() {
@@ -111,7 +125,7 @@ class SearchViewController: NiblessViewController {
         movieCollectionView.rx.modelSelected(GeneralMovie.self)
             .subscribe(
                 onNext: { [unowned self] movie in
-                    self.viewModel.goToMovieDetail(movieId: movie.id)
+                    self.viewModel.goToMovieDetail(movie: movie)
                 }
             )
             .disposed(by: disposeBag)
@@ -123,9 +137,12 @@ class SearchViewController: NiblessViewController {
 
 extension SearchViewController: UICollectionViewDelegateMagazineLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeModeForItemAt indexPath: IndexPath) -> MagazineLayoutItemSizeMode {
-        let widthMode = MagazineLayoutItemWidthMode.thirdWidth
-        //let viewHeight = view.frame.height
-        let heightMode = MagazineLayoutItemHeightMode.static(height: 250)
+        var widthMode = MagazineLayoutItemWidthMode.thirdWidth
+        let heightMode = MagazineLayoutItemHeightMode.static(height: view.frame.height / 4)
+        if view.frame.width > 550 {
+            widthMode = MagazineLayoutItemWidthMode.fifthWidth
+        }
+        
         return MagazineLayoutItemSizeMode(widthMode: widthMode, heightMode: heightMode)
     }
     

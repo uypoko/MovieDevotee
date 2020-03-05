@@ -22,7 +22,11 @@ class MovieDetailDependencyContainer {
         let dataRemoteAPI = DataRemoteAPI()
         let dataRepository = DataRepositoryImp(dataRemoteAPI: dataRemoteAPI)
         
-        let movieDetailViewModel = MovieDetailViewModel(movieId: movieId, movieRepository: movieRepository, dataRepository: dataRepository)
+        let movieDetailViewModel = MovieDetailViewModel(
+            movieId: movieId,
+            movieRepository: movieRepository,
+            dataRepository: dataRepository,
+            utilityPrioritizedConcurrentQueue: appDependencyContainer.utilityPrioritizedConcurrentQueue)
         
         let movieDetailVC = MovieDetailViewController(viewModel: movieDetailViewModel)
         

@@ -7,8 +7,9 @@
 //
 
 import RxSwift
+import RealmSwift
 
 protocol RecentlyViewedMoviesRepository {
-    func readRecentlyViewedMoviesHistory() -> Single<[GeneralMovie]>
-    func saveMovieToRecentlyViewed(movie: GeneralMovie) -> Completable
+    func readRecentlyViewedMoviesHistory() -> Results<GeneralMovie>
+    func saveMovieToRecentlyViewed(movie: GeneralMovie)
 }

@@ -65,4 +65,12 @@ class UIViewFactory {
         return stackView
     }
     
+    // MARK: Activity Indicator
+    func makeWhiteLargeIndicator() -> UIActivityIndicatorView {
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.color = .white
+        activityIndicator.style = .large
+        
+        return activityIndicator
+    }
 }

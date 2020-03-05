@@ -6,30 +6,31 @@
 //  Copyright © 2020 Daylighter. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 class SearchDependencyContainer {
     private let appDependencyContainer: AppDependencyContainer
+    let navigationController = UINavigationController()
     
     init(appDependencyContainer: AppDependencyContainer) {
         self.appDependencyContainer = appDependencyContainer
     }
     
-    func constructSearchVC() -> SearchViewController {
+    func constructSearchVC() -> UIViewController {
+        let recentlyViewedRepository = RecentlyViewedMoviesRepositoryImp(dataStore: appDependencyContainer.movieDataStore)
+        
         let movieRemoteAPI = MovieRemoteAPI()
         let movieRepository = MovieRepositoryImp(movieRemoteAPI: movieRemoteAPI)
         
-        let dataRemoteAPI = DataRemoteAPI()
-        let dataRepository = DataRepositoryImp(dataRemoteAPI: dataRemoteAPI)
-        
         let searchViewModel = SearchViewModel(
             movieRepository: movieRepository,
-            dataRepository: dataRepository,
+            recentlyViewedMoviesRepository: recentlyViewedRepository,
             navigator: self,
             utilityPrioritizedConcurrentQueue: appDependencyContainer.utilityPrioritizedConcurrentQueue)
         let homeViewController = SearchViewController(viewModel: searchViewModel)
         
-        return homeViewController
+        navigationController.viewControllers = [homeViewController]
+        return navigationController
     }
 }
 
@@ -38,7 +39,7 @@ extension SearchDependencyContainer: SearchNavigationDelegate {
         let movieDetailContainer = MovieDetailDependencyContainer(appDependencyContainer: appDependencyContainer)
         let movieDetailVC = movieDetailContainer.constructMovieDetailVC(movieId: movieId)
         
-        appDependencyContainer.navigationController.pushViewController(movieDetailVC, animated: false)
+        navigationController.pushViewController(movieDetailVC, animated: false)
         
     }
     

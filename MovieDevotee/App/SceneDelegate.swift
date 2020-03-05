@@ -20,11 +20,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         
         let rootVC = appDependencyContainer.constructRootVC()
-        let navigationController = appDependencyContainer.navigationController
-        navigationController.viewControllers = [rootVC]
-        //navigationController.top
+        
         window = UIWindow(windowScene: scene)
-        window?.rootViewController = navigationController
+        window?.rootViewController = rootVC
         
         window?.makeKeyAndVisible()
     }

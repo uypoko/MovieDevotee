@@ -15,10 +15,29 @@ import RealmSwift
         case episode
     }
     
+    enum Properties: String {
+        case id
+        case title
+        case type
+        case year
+        case posterURLString
+        case viewedDate
+    }
+    
     dynamic var id: String = UUID().uuidString
     dynamic var title: String = ""
-    dynamic var type: MovieType = .movie
+    dynamic private var _type = MovieType.movie.rawValue
+    var type: MovieType {
+        get { return MovieType(rawValue: _type)! }
+        set { _type = newValue.rawValue }
+    }
+    
     dynamic var year: String = ""
     dynamic var posterURLString: String = ""
+    dynamic var viewedDate: Date = Date(timeIntervalSince1970: 0)
+    
+    override class func primaryKey() -> String? {
+        return Properties.id.rawValue
+    }
     
 }

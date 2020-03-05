@@ -9,17 +9,14 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import SDWebImage
 
 class MovieDetailViewController: NiblessViewController {
     
     //MARK: UI Controls
     
     private lazy var activityIndicator: UIActivityIndicatorView = {
-        let activityIndicator = UIActivityIndicatorView()
-        activityIndicator.color = .white
-        activityIndicator.style = .large
-        
-        return activityIndicator
+        return uiviewFactory.makeWhiteLargeIndicator()
     }()
     
     private lazy var posterImageView: UIImageView = {
@@ -77,7 +74,7 @@ class MovieDetailViewController: NiblessViewController {
     
     private lazy var detailWrapperView: UIView = {
         let view = UIView()
-        view.backgroundColor = wrapperViewBackgroundColor
+        view.backgroundColor = .darkGray
         return view
     }()
     
@@ -131,17 +128,12 @@ class MovieDetailViewController: NiblessViewController {
     private let viewModel: MovieDetailViewModel
 
     private let disposeBag = DisposeBag()
-    private let wrapperViewBackgroundColor = UIColor(red: 51/255, green: 51/255, blue: 51/255, alpha: 1)
     
     // MARK: Lifecycle
     
     init(viewModel: MovieDetailViewModel) {
         self.viewModel = viewModel
         super.init()
-    }
-    
-    deinit {
-        print("Movie Detail deinit")
     }
     
     override func viewDidLoad() {
@@ -153,7 +145,6 @@ class MovieDetailViewController: NiblessViewController {
     // MARK: View Setups
     private func setupInitialViews() {
         view.addSubview(activityIndicator)
-        activityIndicator.center = view.center
         
         view.addSubview(posterImageView)
         
@@ -203,6 +194,9 @@ class MovieDetailViewController: NiblessViewController {
         
         yearRatedLengthStackView.setContentHuggingPriority(UILayoutPriority(251), for: .vertical)
         genreStackView.setContentHuggingPriority(UILayoutPriority(251), for: .vertical)
+        
+        view.backgroundColor = .darkThemeColor
+        activityIndicator.center = view.center
         
         let cons = NSLayoutConstraint(item: genreStackView, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1, constant: 0)
         cons.priority = UILayoutPriority(rawValue: 250)
@@ -296,18 +290,28 @@ class MovieDetailViewController: NiblessViewController {
     
     private func bindFromViewModel() {
         
-        viewModel.posterPhotoDataSubject
-            .observeOn(MainScheduler.instance)
+        viewModel.posterURLSubject
             .subscribe(
-                onNext: { [weak self ] data in
-                let image = UIImage(data: data)
-                self?.posterImageView.image = image
-            })
+                onNext: { [weak self] url in
+                    guard let self = self else { return }
+                    
+                    self.posterImageView.sd_setImage(with: URL(string: url), placeholderImage: UIImage(named: "placeholder.png"))
+                }
+            )
             .disposed(by: disposeBag)
         
-        viewModel.activityIndicatorAnimating
-            .asDriver(onErrorJustReturn: true)
+        let activityIndicatorAnimating = viewModel.activityIndicatorAnimating.asDriver(onErrorJustReturn: false)
+        
+        activityIndicatorAnimating
             .drive(activityIndicator.rx.isAnimating)
+            .disposed(by: disposeBag)
+        
+        activityIndicatorAnimating
+            .drive(rightInforView.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        activityIndicatorAnimating
+            .drive(detailWrapperView.rx.isHidden)
             .disposed(by: disposeBag)
         
         viewModel.titleSubject
