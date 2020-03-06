@@ -25,6 +25,17 @@ class UIViewFactory {
     func makeMediumBoldLabel(alignment: NSTextAlignment) -> UILabel {
         let label = UILabel(frame: .zero)
 
+        label.font = UIFont.systemFont(ofSize: 18, weight: .bold)
+        label.textAlignment = alignment
+        label.textColor = .white
+        label.numberOfLines = 0
+        
+        return label
+    }
+    
+    func makeLargeBoldLabel(alignment: NSTextAlignment) -> UILabel {
+        let label = UILabel(frame: .zero)
+
         label.font = UIFont.systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = alignment
         label.textColor = .white

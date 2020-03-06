@@ -23,6 +23,7 @@ class UserManagementViewController: NiblessViewController {
     private lazy var viewedMoviesTableView: UITableView = {
         let tableView = UITableView()
         
+        tableView.backgroundColor = .darkGray
         return tableView
     }()
     
@@ -75,6 +76,7 @@ class UserManagementViewController: NiblessViewController {
         ])
     }
     
+    // MARK: Bindings
     private func bindToTableView() {
         //guard let recentlyViewedMovies = viewModel.recentlyViewedMovies else { return }
         

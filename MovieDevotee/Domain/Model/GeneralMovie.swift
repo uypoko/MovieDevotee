@@ -26,11 +26,7 @@ import RealmSwift
     
     dynamic var id: String = UUID().uuidString
     dynamic var title: String = ""
-    dynamic private var _type = MovieType.movie.rawValue
-    var type: MovieType {
-        get { return MovieType(rawValue: _type)! }
-        set { _type = newValue.rawValue }
-    }
+    dynamic var _type: String = MovieType.movie.rawValue
     
     dynamic var year: String = ""
     dynamic var posterURLString: String = ""
@@ -40,4 +36,9 @@ import RealmSwift
         return Properties.id.rawValue
     }
     
+    // MARK: In-Memory
+    var type: MovieType {
+        get { return MovieType(rawValue: _type)! }
+        set { _type = newValue.rawValue }
+    }
 }

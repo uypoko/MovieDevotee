@@ -19,6 +19,11 @@ class MovieDetailViewModel {
     let lengthSubject: BehaviorSubject<String> = BehaviorSubject(value: "")
     let releaseDateSubject: BehaviorSubject<String> = BehaviorSubject(value: "")
     let genresSubject: BehaviorSubject<[String]> = BehaviorSubject(value: [])
+    
+    let imdbRatingSubject: BehaviorSubject<String> = BehaviorSubject(value: "0.0/10")
+    let rottenRatingSubject: BehaviorSubject<String?> = BehaviorSubject(value: nil)
+    let metaRatingSubject: BehaviorSubject<String?> = BehaviorSubject(value: nil)
+    
     let directorSubject: BehaviorSubject<String> = BehaviorSubject(value: "")
     let writerSubject: BehaviorSubject<[String]> = BehaviorSubject(value: [])
     let castSubject: BehaviorSubject<[String]> = BehaviorSubject(value: [])
@@ -65,6 +70,17 @@ class MovieDetailViewModel {
                     self.writerSubject.onNext(movie.writer)
                     self.castSubject.onNext(movie.cast)
                     self.plotSubject.onNext(movie.plot)
+                    
+                    for rating in movie.ratings {
+                        switch rating.source {
+                        case .imdb:
+                            self.imdbRatingSubject.onNext(rating.value)
+                        case .rotten:
+                            self.rottenRatingSubject.onNext(rating.value)
+                        case .meta:
+                            self.metaRatingSubject.onNext(rating.value)
+                        }
+                    }
                 }
             )
             .disposed(by: disposeBag)

@@ -70,12 +70,13 @@ class SearchViewController: NiblessViewController {
         movieCollectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         movieCollectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         movieCollectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        movieCollectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        movieCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
 
         movieCollectionView.register(SearchedMovieCollectionViewCell.self, forCellWithReuseIdentifier: SearchedMovieCollectionViewCell.description())
         
         movieCollectionView.rx.setDelegate(self).disposed(by: disposeBag)
         
+        view.backgroundColor = .darkThemeColor
         activityIndicator.center = view.center
     }
     
@@ -123,11 +124,7 @@ class SearchViewController: NiblessViewController {
             .disposed(by: disposeBag)
         
         movieCollectionView.rx.modelSelected(GeneralMovie.self)
-            .subscribe(
-                onNext: { [unowned self] movie in
-                    self.viewModel.goToMovieDetail(movie: movie)
-                }
-            )
+            .bind(to: viewModel.movieCellTappedSubject)
             .disposed(by: disposeBag)
     }
     
@@ -167,7 +164,7 @@ extension SearchViewController: UICollectionViewDelegateMagazineLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetsForSectionAtIndex index: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 6, left: 12, bottom: 6, right: 12)
+        return UIEdgeInsets(top: 6, left: 0, bottom: 6, right: 0)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetsForItemsInSectionAtIndex index: Int) -> UIEdgeInsets {

@@ -24,6 +24,18 @@
 import Foundation
 
 struct DetailedMovie {
+    
+    struct Ratings {
+        enum SourceType: String {
+            case imdb = "Internet Movie Database"
+            case rotten = "Rotten Tomatoes"
+            case meta = "Metacritic"
+        }
+        
+        let source: SourceType
+        let value: String
+    }
+    
     let id: String
     let title: String
     let year: String
@@ -36,5 +48,6 @@ struct DetailedMovie {
     let posterURLString: String
     let cast: [String]
     let plot: String
+    let ratings: [Ratings]
     
 }

@@ -31,11 +31,11 @@ class ViewedMovieTableViewCell: UITableViewCell {
     }()
 
     private lazy var titleLabel: UILabel = {
-        return uiviewFactory.makeSmallBoldLabel(alignment: .left)
+        return uiviewFactory.makeMediumBoldLabel(alignment: .left)
     }()
     
     private lazy var additionalInforLabel: UILabel = {
-        return uiviewFactory.makeSmallRegularLabel(alignment: .left)
+        return uiviewFactory.makeMediumRegularLabel(alignment: .left)
     }()
     
     // MARK: Lifecycle
@@ -91,13 +91,14 @@ class ViewedMovieTableViewCell: UITableViewCell {
         
         switch movie.type {
         case .series:
-            contentView.backgroundColor = .lightGray
-            additionalInfor = "TV Series " + additionalInfor
+            contentView.backgroundColor = .gray
+            additionalInfor = "TV Series  " + additionalInfor
         case .movie:
             contentView.backgroundColor = .darkGray
+            additionalInfor = "Movie  " + additionalInfor
         case .episode:
             contentView.backgroundColor = .gray
-            additionalInfor = "Episode " + additionalInfor
+            additionalInfor = "Episode  " + additionalInfor
         }
         
         additionalInforLabel.text = additionalInfor

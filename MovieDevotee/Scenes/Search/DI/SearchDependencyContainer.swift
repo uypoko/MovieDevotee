@@ -39,7 +39,7 @@ extension SearchDependencyContainer: SearchNavigationDelegate {
         let movieDetailContainer = MovieDetailDependencyContainer(appDependencyContainer: appDependencyContainer)
         let movieDetailVC = movieDetailContainer.constructMovieDetailVC(movieId: movieId)
         
-        navigationController.pushViewController(movieDetailVC, animated: false)
+        navigationController.pushViewController(movieDetailVC, animated: true)
         
     }
     

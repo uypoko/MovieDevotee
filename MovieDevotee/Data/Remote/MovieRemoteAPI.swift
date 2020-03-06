@@ -86,6 +86,19 @@ class MovieRemoteAPI {
                         let castString = movieJSON["Actors"].stringValue
                         let castArray = castString.components(separatedBy: ", ")
                         let plot = movieJSON["Plot"].stringValue
+                        let ratingsArray = movieJSON["Ratings"].arrayValue
+                        
+                        print(ratingsArray)
+                        
+                        var ratings: [DetailedMovie.Ratings] = []
+                        for rating in ratingsArray {
+                            let sourceString = rating["Source"].stringValue
+                            let source = DetailedMovie.Ratings.SourceType(rawValue: sourceString) ?? DetailedMovie.Ratings.SourceType.imdb
+                            let value = rating["Value"].stringValue
+                            
+                            let rating = DetailedMovie.Ratings(source: source, value: value)
+                            ratings.append(rating)
+                        }
                         
                         let movie = DetailedMovie(
                             id: id,
@@ -99,7 +112,8 @@ class MovieRemoteAPI {
                             writer: writerArray,
                             posterURLString: posterURL,
                             cast: castArray,
-                            plot: plot
+                            plot: plot,
+                            ratings: ratings
                         )
                         
                         single(.success(movie))

@@ -84,7 +84,7 @@ class SearchedMovieCollectionViewCell: MagazineLayoutCollectionViewCell {
         
         switch movie.type {
         case .series:
-            contentView.backgroundColor = .lightGray
+            contentView.backgroundColor = .gray
             additionalInfor = "TV Series " + additionalInfor
         case .movie:
             contentView.backgroundColor = .darkGray

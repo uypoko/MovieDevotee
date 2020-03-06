@@ -8,6 +8,7 @@
 
 import Foundation
 import RxSwift
+import RxCocoa
 
 class SearchViewModel {
     // MARK: Outputs
@@ -16,8 +17,9 @@ class SearchViewModel {
     let activityIndicatorAnimating: BehaviorSubject<Bool> = BehaviorSubject(value: false)
     
     // MARK: Inputs
-    let searchedKeywordSubject: PublishSubject<String> = PublishSubject()
-    let searchButtonTappedSubject: PublishSubject<Void> = PublishSubject()
+    let searchedKeywordSubject: PublishRelay<String> = PublishRelay()
+    let searchButtonTappedSubject: PublishRelay<Void> = PublishRelay()
+    let movieCellTappedSubject: PublishRelay<GeneralMovie> = PublishRelay()
     
     // MARK: Private properties
     private let movieRepository: MovieRepository
@@ -38,13 +40,14 @@ class SearchViewModel {
         
         performSearchRequestOnEditing()
         performSearchRequestOnButtonTapped()
+        respondToMovieCellTapped()
     }
     
     private func performSearchRequestOnEditing() {
         // Observe current search text
         searchedKeywordSubject
             .filter { $0 != "" }
-            .debounce(RxTimeInterval.milliseconds(1500), scheduler: MainScheduler.instance)
+            .debounce(RxTimeInterval.milliseconds(1000), scheduler: MainScheduler.instance)
             .distinctUntilChanged()
             .subscribeOn(utilityPrioritizedConcurrentQueue)
             .subscribe(
@@ -74,6 +77,18 @@ class SearchViewModel {
             .disposed(by: disposeBag)
     }
     
+    private func respondToMovieCellTapped() {
+        movieCellTappedSubject
+            .throttle(RxTimeInterval.milliseconds(500), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { [weak self]  movie in
+                guard let self = self else { return }
+                
+                self.recentlyViewedMoviesRepository.saveMovieToRecentlyViewed(movie: movie)
+                self.navigator.pushToMovieDetail(movieId: movie.id)
+            })
+            .disposed(by: disposeBag)
+    }
+    
     private func search(by keyword: String) {
         activityIndicatorAnimating.onNext(true)
         
@@ -93,13 +108,6 @@ class SearchViewModel {
                 }
             )
             .disposed(by: disposeBag)
-    }
-    
-    // MARK: Public functions
-    
-    func goToMovieDetail(movie: GeneralMovie) {
-        recentlyViewedMoviesRepository.saveMovieToRecentlyViewed(movie: movie)
-        navigator.pushToMovieDetail(movieId: movie.id)
     }
     
 }

@@ -36,12 +36,12 @@ class UserManagementViewModel {
     
     private func respondToMovieCellTapped() {
         movieCellTapped
-            .distinctUntilChanged()
             .throttle(RxTimeInterval.milliseconds(500), scheduler: MainScheduler.instance)
             .subscribe(
                 onNext: { [weak self] movie in
                     guard let self = self else { return }
                     
+                    self.recentlyViewedMoviesRepository.saveMovieToRecentlyViewed(movie: movie)
                     self.navigator.goToMovieDetail(movie: movie)
                 }
             )

@@ -31,7 +31,7 @@ class MovieDetailViewController: NiblessViewController {
     }()
     
     private lazy var titleLabel: UILabel = {
-        return uiviewFactory.makeMediumBoldLabel(alignment: .left)
+        return uiviewFactory.makeLargeBoldLabel(alignment: .left)
     }()
     
     private lazy var yearRatedLengthStackView: UIStackView = {
@@ -76,6 +76,88 @@ class MovieDetailViewController: NiblessViewController {
         let view = UIView()
         view.backgroundColor = .darkGray
         return view
+    }()
+    
+    private lazy var ratingsWrapperView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .darkGray
+        return view
+    }()
+    
+    private lazy var ratingsStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .fill
+        stackView.distribution = .fillEqually
+        return stackView
+    }()
+    
+    private lazy var imdbRatingStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 2
+        return stackView
+    }()
+    
+    private lazy var imdbRatingLabel: UILabel = {
+        let label = uiviewFactory.makeMediumRegularLabel(alignment: .center)
+        label.text = "⭐️"
+        
+        return label
+    }()
+    
+    private lazy var imdbRatingValueLabel: UILabel = {
+        let label = uiviewFactory.makeMediumRegularLabel(alignment: .center)
+        
+        return label
+    }()
+    
+    private lazy var rottenStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .fill
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 2
+        return stackView
+    }()
+    
+    private lazy var rottenRatingLabel: UILabel = {
+        let label = uiviewFactory.makeMediumRegularLabel(alignment: .center)
+        label.text = "🍅"
+        
+        return label
+    }()
+    
+    private lazy var rottenRatingValueLabel: UILabel = {
+        let label = uiviewFactory.makeMediumRegularLabel(alignment: .center)
+        
+        return label
+    }()
+    
+    private lazy var metaRatingStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.alignment = .center
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 2
+        return stackView
+    }()
+    
+    private lazy var metaRatingLabel: UILabel = {
+        let label = uiviewFactory.makeMediumRegularLabel(alignment: .center)
+        label.text = "Metascore"
+        
+        return label
+    }()
+    
+    private lazy var metaRatingValueLabel: UILabel = {
+        let label = uiviewFactory.makeMediumRegularLabel(alignment: .center)
+        label.text = "00"
+        label.backgroundColor = .green
+        
+        return label
     }()
     
     private lazy var detailStackView: UIStackView = {
@@ -145,7 +227,7 @@ class MovieDetailViewController: NiblessViewController {
     // MARK: View Setups
     private func setupInitialViews() {
         view.addSubview(activityIndicator)
-        
+        // Overview
         view.addSubview(posterImageView)
         
         yearRatedLengthStackView.addArrangedSubview(yearLabel)
@@ -159,6 +241,20 @@ class MovieDetailViewController: NiblessViewController {
         rightInforView.addSubview(releaseDateLabel)
         view.addSubview(rightInforView)
         
+        // Ratings
+        imdbRatingStackView.addArrangedSubview(imdbRatingLabel)
+        imdbRatingStackView.addArrangedSubview(imdbRatingValueLabel)
+        rottenStackView.addArrangedSubview(rottenRatingLabel)
+        rottenStackView.addArrangedSubview(rottenRatingValueLabel)
+        metaRatingStackView.addArrangedSubview(metaRatingValueLabel)
+        metaRatingStackView.addArrangedSubview(metaRatingLabel)
+        ratingsStackView.addArrangedSubview(imdbRatingStackView)
+        ratingsStackView.addArrangedSubview(rottenStackView)
+        ratingsStackView.addArrangedSubview(metaRatingStackView)
+        ratingsWrapperView.addSubview(ratingsStackView)
+        view.addSubview(ratingsWrapperView)
+        
+        // Details
         detailStackView.addArrangedSubview(plotLabel)
         detailStackView.addArrangedSubview(separatorView1)
         detailStackView.addArrangedSubview(directorLabel)
@@ -179,6 +275,9 @@ class MovieDetailViewController: NiblessViewController {
         genreStackView.translatesAutoresizingMaskIntoConstraints = false
         genreScrollView.translatesAutoresizingMaskIntoConstraints = false
         releaseDateLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        ratingsStackView.translatesAutoresizingMaskIntoConstraints = false
+        ratingsWrapperView.translatesAutoresizingMaskIntoConstraints = false
         
         detailStackView.translatesAutoresizingMaskIntoConstraints = false
         detailWrapperView.translatesAutoresizingMaskIntoConstraints = false
@@ -235,9 +334,18 @@ class MovieDetailViewController: NiblessViewController {
             releaseDateLabel.trailingAnchor.constraint(equalTo: rightInforView.trailingAnchor),
             releaseDateLabel.topAnchor.constraint(equalTo: genreScrollView.bottomAnchor, constant: 8),
             
+            ratingsWrapperView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            ratingsWrapperView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            ratingsWrapperView.topAnchor.constraint(equalTo: rightInforView.bottomAnchor),
+            
+            ratingsStackView.leadingAnchor.constraint(equalTo: ratingsWrapperView.leadingAnchor, constant: 8),
+            ratingsStackView.trailingAnchor.constraint(equalTo: ratingsWrapperView.trailingAnchor, constant: -8),
+            ratingsStackView.topAnchor.constraint(equalTo: ratingsWrapperView.topAnchor, constant: 8),
+            ratingsStackView.bottomAnchor.constraint(equalTo: ratingsWrapperView.bottomAnchor, constant: -8),
+            
             detailWrapperView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
             detailWrapperView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
-            detailWrapperView.topAnchor.constraint(equalTo: rightInforView.bottomAnchor),
+            detailWrapperView.topAnchor.constraint(equalTo: ratingsWrapperView.bottomAnchor, constant: 8),
             
             detailStackView.leadingAnchor.constraint(equalTo: detailWrapperView.leadingAnchor, constant: 8),
             detailStackView.trailingAnchor.constraint(equalTo: detailWrapperView.trailingAnchor, constant: -8),
@@ -347,6 +455,35 @@ class MovieDetailViewController: NiblessViewController {
             .map { "Release Date: " + $0 }
             .asDriver(onErrorJustReturn: "")
             .drive(releaseDateLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        // Ratings
+        viewModel.imdbRatingSubject
+            .asDriver(onErrorJustReturn: "0.0/10")
+            .drive(imdbRatingValueLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.rottenRatingSubject
+            .asDriver(onErrorJustReturn: "0%")
+            .drive(rottenRatingValueLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.metaRatingSubject
+            .map { $0?.components(separatedBy: "/")[0] }
+            .asDriver(onErrorJustReturn: "00")
+            .drive(metaRatingValueLabel.rx.text)
+            .disposed(by: disposeBag)
+        
+        viewModel.rottenRatingSubject
+            .map { $0 == nil }
+            .asDriver(onErrorJustReturn: true)
+            .drive(rottenStackView.rx.isHidden)
+            .disposed(by: disposeBag)
+        
+        viewModel.metaRatingSubject
+            .map { $0 == nil }
+            .asDriver(onErrorJustReturn: true)
+            .drive(metaRatingStackView.rx.isHidden)
             .disposed(by: disposeBag)
         
         viewModel.plotSubject
