@@ -4,6 +4,12 @@ Movie Devotee searches IMDb database for movies and TV shows.
 * Seach for movies and TV shows by title
 * View movie details
 * View recently searched items
+\
+![Screenshot](Images/operating.gif)
+\
+![Screenshot](Images/Search.png)
+![Screenshot](Images/Detail.png)
+![Screenshot](Images/History.png)
 ## App Architecture
 ### Dependency Injection
 A container is responsible for injecting dependencies into every objects in the module then return its view controller and navigation.
