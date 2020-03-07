@@ -2,7 +2,7 @@
 Movie Devotee searches IMDb database for movies and TV shows.
 ## Features
 * Seach for movies and TV shows by title
-* View movie details
+* View details of movies
 * View recently searched items
 \
 ![Screenshot](Images/operating.gif)
