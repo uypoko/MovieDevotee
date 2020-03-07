@@ -88,8 +88,6 @@ class MovieRemoteAPI {
                         let plot = movieJSON["Plot"].stringValue
                         let ratingsArray = movieJSON["Ratings"].arrayValue
                         
-                        print(ratingsArray)
-                        
                         var ratings: [DetailedMovie.Ratings] = []
                         for rating in ratingsArray {
                             let sourceString = rating["Source"].stringValue

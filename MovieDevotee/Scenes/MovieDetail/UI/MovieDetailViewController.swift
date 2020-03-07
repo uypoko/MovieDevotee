@@ -15,6 +15,15 @@ class MovieDetailViewController: NiblessViewController {
     
     //MARK: UI Controls
     
+    private let scrollView = UIScrollView()
+    
+    private lazy var wrapperView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .darkThemeColor
+        
+        return view
+    }()
+    
     private lazy var activityIndicator: UIActivityIndicatorView = {
         return uiviewFactory.makeWhiteLargeIndicator()
     }()
@@ -227,8 +236,11 @@ class MovieDetailViewController: NiblessViewController {
     // MARK: View Setups
     private func setupInitialViews() {
         view.addSubview(activityIndicator)
+        scrollView.addSubview(wrapperView)
+        view.addSubview(scrollView)
+        
         // Overview
-        view.addSubview(posterImageView)
+        wrapperView.addSubview(posterImageView)
         
         yearRatedLengthStackView.addArrangedSubview(yearLabel)
         yearRatedLengthStackView.addArrangedSubview(ratedLabel)
@@ -239,7 +251,7 @@ class MovieDetailViewController: NiblessViewController {
         genreScrollView.addSubview(genreStackView)
         rightInforView.addSubview(genreScrollView)
         rightInforView.addSubview(releaseDateLabel)
-        view.addSubview(rightInforView)
+        wrapperView.addSubview(rightInforView)
         
         // Ratings
         imdbRatingStackView.addArrangedSubview(imdbRatingLabel)
@@ -252,7 +264,7 @@ class MovieDetailViewController: NiblessViewController {
         ratingsStackView.addArrangedSubview(rottenStackView)
         ratingsStackView.addArrangedSubview(metaRatingStackView)
         ratingsWrapperView.addSubview(ratingsStackView)
-        view.addSubview(ratingsWrapperView)
+        wrapperView.addSubview(ratingsWrapperView)
         
         // Details
         detailStackView.addArrangedSubview(plotLabel)
@@ -263,8 +275,10 @@ class MovieDetailViewController: NiblessViewController {
         detailStackView.addArrangedSubview(separatorView3)
         detailStackView.addArrangedSubview(castLabel)
         detailWrapperView.addSubview(detailStackView)
-        view.addSubview(detailWrapperView)
+        wrapperView.addSubview(detailWrapperView)
         
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        wrapperView.translatesAutoresizingMaskIntoConstraints = false
         posterImageView.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         rightInforView.translatesAutoresizingMaskIntoConstraints = false
@@ -297,19 +311,32 @@ class MovieDetailViewController: NiblessViewController {
         view.backgroundColor = .darkThemeColor
         activityIndicator.center = view.center
         
-        let cons = NSLayoutConstraint(item: genreStackView, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 1, constant: 0)
-        cons.priority = UILayoutPriority(rawValue: 250)
-        cons.isActive = true
+        let genreStackViewWidthCons = NSLayoutConstraint(item: genreStackView, attribute: .width, relatedBy: .equal, toItem: view, attribute: .width, multiplier: 3/4, constant: 0)
+        genreStackViewWidthCons.priority = UILayoutPriority(rawValue: 250)
+        genreStackViewWidthCons.isActive = true
+        
+        wrapperView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         NSLayoutConstraint.activate([
-            posterImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
-            posterImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            wrapperView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            wrapperView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            wrapperView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            wrapperView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            wrapperView.widthAnchor.constraint(equalTo: view.widthAnchor),
+            
+            posterImageView.leadingAnchor.constraint(equalTo: wrapperView.leadingAnchor, constant: 8),
+            posterImageView.topAnchor.constraint(equalTo: wrapperView.topAnchor),
             posterImageView.widthAnchor.constraint(equalToConstant: view.frame.width / 4),
             posterImageView.heightAnchor.constraint(equalToConstant: view.frame.height / 5),
             
             rightInforView.leadingAnchor.constraint(equalTo: posterImageView.trailingAnchor, constant: 12),
-            rightInforView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
-            rightInforView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 8),
+            rightInforView.trailingAnchor.constraint(equalTo: wrapperView.trailingAnchor, constant: -8),
+            rightInforView.topAnchor.constraint(equalTo: wrapperView.safeAreaLayoutGuide.topAnchor, constant: 8),
             rightInforView.heightAnchor.constraint(equalToConstant: view.frame.height / 5),
             
             titleLabel.leadingAnchor.constraint(equalTo: rightInforView.leadingAnchor),
@@ -334,8 +361,8 @@ class MovieDetailViewController: NiblessViewController {
             releaseDateLabel.trailingAnchor.constraint(equalTo: rightInforView.trailingAnchor),
             releaseDateLabel.topAnchor.constraint(equalTo: genreScrollView.bottomAnchor, constant: 8),
             
-            ratingsWrapperView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            ratingsWrapperView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            ratingsWrapperView.leadingAnchor.constraint(equalTo: wrapperView.leadingAnchor),
+            ratingsWrapperView.trailingAnchor.constraint(equalTo: wrapperView.trailingAnchor),
             ratingsWrapperView.topAnchor.constraint(equalTo: rightInforView.bottomAnchor),
             
             ratingsStackView.leadingAnchor.constraint(equalTo: ratingsWrapperView.leadingAnchor, constant: 8),
@@ -343,9 +370,10 @@ class MovieDetailViewController: NiblessViewController {
             ratingsStackView.topAnchor.constraint(equalTo: ratingsWrapperView.topAnchor, constant: 8),
             ratingsStackView.bottomAnchor.constraint(equalTo: ratingsWrapperView.bottomAnchor, constant: -8),
             
-            detailWrapperView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
-            detailWrapperView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor),
+            detailWrapperView.leadingAnchor.constraint(equalTo: wrapperView.leadingAnchor),
+            detailWrapperView.trailingAnchor.constraint(equalTo: wrapperView.trailingAnchor),
             detailWrapperView.topAnchor.constraint(equalTo: ratingsWrapperView.bottomAnchor, constant: 8),
+            detailWrapperView.bottomAnchor.constraint(equalTo: wrapperView.bottomAnchor),
             
             detailStackView.leadingAnchor.constraint(equalTo: detailWrapperView.leadingAnchor, constant: 8),
             detailStackView.trailingAnchor.constraint(equalTo: detailWrapperView.trailingAnchor, constant: -8),
@@ -415,12 +443,12 @@ class MovieDetailViewController: NiblessViewController {
             .disposed(by: disposeBag)
         
         activityIndicatorAnimating
-            .drive(rightInforView.rx.isHidden)
+            .drive(wrapperView.rx.isHidden)
             .disposed(by: disposeBag)
         
-        activityIndicatorAnimating
-            .drive(detailWrapperView.rx.isHidden)
-            .disposed(by: disposeBag)
+        //activityIndicatorAnimating
+            //.drive(detailWrapperView.rx.isHidden)
+            //.disposed(by: disposeBag)
         
         viewModel.titleSubject
             .asDriver(onErrorJustReturn: "")
