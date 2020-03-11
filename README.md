@@ -23,6 +23,5 @@ The repository pattern provides facades for networking, persistence and in-memor
 * [Realm Database](https://github.com/realm/realm-cocoa)
 * [RxRealm](https://github.com/RxSwiftCommunity/RxRealm)
 * [Alamofire](https://github.com/Alamofire/Alamofire)
-* [SwiftyJSON](https://github.com/SwiftyJSON/SwiftyJSON)
 * [MagazineLayout](https://github.com/airbnb/MagazineLayout)
 * [SDWebImage](https://github.com/SDWebImage/SDWebImage)

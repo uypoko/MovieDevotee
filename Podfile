@@ -11,8 +11,6 @@ target 'MovieDevotee' do
   
   pod 'Alamofire', '~> 5.0'
   
-  pod 'SwiftyJSON', '~> 4.0'
-  
   pod 'MagazineLayout', '1.5.5'
 
   pod 'SDWebImage', '~> 5.0'

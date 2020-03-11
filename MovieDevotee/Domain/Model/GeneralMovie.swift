@@ -8,7 +8,7 @@
 import Foundation
 import RealmSwift
 
-@objcMembers class GeneralMovie: Object {
+@objcMembers class GeneralMovie: Object, Codable {
     enum MovieType: String {
         case movie
         case series
@@ -22,6 +22,14 @@ import RealmSwift
         case year
         case posterURLString
         case viewedDate
+    }
+    
+    enum CodingKeys: String, CodingKey {
+        case id = "imdbID"
+        case title = "Title"
+        case year = "Year"
+        case posterURLString = "Poster"
+        case _type = "Type"
     }
     
     dynamic var id: String = UUID().uuidString
