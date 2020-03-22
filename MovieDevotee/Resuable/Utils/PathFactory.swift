@@ -8,11 +8,11 @@
 
 import Foundation
 
-enum PathError: Error {
-    case notFound
-}
-
-class PathProvider {
+struct PathFactory {
+    
+    enum PathError: Error {
+        case notFound
+    }
     
     func inLibrary(_ name: String) throws -> URL {
         return try FileManager.default

@@ -11,14 +11,15 @@ import RxSwift
 import RealmSwift
 
 class MovieDataStore {
-    private let realmProvider: RealmProvider
+    private let realmFactory: RealmFactory
+    private let movieRealmFileName = "movies.realm"
     
-    init(realmProvider: RealmProvider) {
-        self.realmProvider = realmProvider
+    init(realmFactory: RealmFactory) {
+        self.realmFactory = realmFactory
     }
     
     func fetchRecentlyViewedMovies() -> Results<GeneralMovie> {
-        guard let realm = self.realmProvider.realm else {
+        guard let realm = try? realmFactory.makeRealm(fileName: movieRealmFileName, directoryType: .documents, objectTypes: [GeneralMovie.self]) else {
             fatalError("realm nil")
         }
         
@@ -33,12 +34,10 @@ class MovieDataStore {
             let disposables = Disposables.create()
             guard let self = self else { return disposables }
             
-            guard let realm = self.realmProvider.realm else {
-                completable(.error(RealmProvider.RealmError.realmNotFound))
-                return disposables
-            }
-            
             do {
+                let realm = try self.realmFactory
+                    .makeRealm(fileName: self.movieRealmFileName, directoryType: .documents, objectTypes: [GeneralMovie.self])
+                
                 try realm.write {
                     movie.viewedDate = Date()
                     
@@ -48,8 +47,7 @@ class MovieDataStore {
                 }
                 
                 completable(.completed)
-            } catch {
-                print("Error: \(error.localizedDescription)")
+            } catch (let error) {
                 completable(.error(error))
             }
             

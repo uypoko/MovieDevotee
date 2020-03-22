@@ -16,11 +16,10 @@ class AppDependencyContainer {
     // Long-lived singleton dependencies
     let utilityPrioritizedConcurrentQueue = ConcurrentDispatchQueueScheduler.init(qos: .utility)
     lazy var movieDataStore: MovieDataStore = {
-        let pathProvider = PathProvider()
-        let realmProvider = RealmProvider(
-            pathProvider: pathProvider,
-            configType: .libraryNotes)
-        let dataStore = MovieDataStore(realmProvider: realmProvider)
+        let pathFactory = PathFactory()
+        let realmFactory = RealmFactory(
+            pathFactory: pathFactory)
+        let dataStore = MovieDataStore(realmFactory: realmFactory)
         
         return dataStore
     }()

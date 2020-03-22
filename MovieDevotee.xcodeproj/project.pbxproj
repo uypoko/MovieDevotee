@@ -42,8 +42,8 @@
 		94F3E2A6240F921A0008A612 /* UserManagementViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F3E2A5240F921A0008A612 /* UserManagementViewModel.swift */; };
 		94F3E2A8240F92310008A612 /* UserManagementViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F3E2A7240F92310008A612 /* UserManagementViewController.swift */; };
 		94F3E2AA240F93550008A612 /* UserManagementNavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F3E2A9240F93550008A612 /* UserManagementNavigator.swift */; };
-		94F3E2AD240F95F20008A612 /* PathProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F3E2AC240F95F20008A612 /* PathProvider.swift */; };
-		94F3E2AF240F96350008A612 /* RealmProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F3E2AE240F96350008A612 /* RealmProvider.swift */; };
+		94F3E2AD240F95F20008A612 /* PathFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F3E2AC240F95F20008A612 /* PathFactory.swift */; };
+		94F3E2AF240F96350008A612 /* RealmFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F3E2AE240F96350008A612 /* RealmFactory.swift */; };
 		94F3E2B1240FA2F40008A612 /* RecentlyViewedMoviesRepositoryImp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F3E2B0240FA2F40008A612 /* RecentlyViewedMoviesRepositoryImp.swift */; };
 		94F3E2B4240FAA8C0008A612 /* UserManagementContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F3E2B3240FAA8C0008A612 /* UserManagementContainer.swift */; };
 		94F3E2B6240FC2060008A612 /* ViewedMovieTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94F3E2B5240FC2060008A612 /* ViewedMovieTableViewCell.swift */; };
@@ -90,8 +90,8 @@
 		94F3E2A5240F921A0008A612 /* UserManagementViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManagementViewModel.swift; sourceTree = "<group>"; };
 		94F3E2A7240F92310008A612 /* UserManagementViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManagementViewController.swift; sourceTree = "<group>"; };
 		94F3E2A9240F93550008A612 /* UserManagementNavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManagementNavigator.swift; sourceTree = "<group>"; };
-		94F3E2AC240F95F20008A612 /* PathProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathProvider.swift; sourceTree = "<group>"; };
-		94F3E2AE240F96350008A612 /* RealmProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmProvider.swift; sourceTree = "<group>"; };
+		94F3E2AC240F95F20008A612 /* PathFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PathFactory.swift; sourceTree = "<group>"; };
+		94F3E2AE240F96350008A612 /* RealmFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RealmFactory.swift; sourceTree = "<group>"; };
 		94F3E2B0240FA2F40008A612 /* RecentlyViewedMoviesRepositoryImp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentlyViewedMoviesRepositoryImp.swift; sourceTree = "<group>"; };
 		94F3E2B3240FAA8C0008A612 /* UserManagementContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManagementContainer.swift; sourceTree = "<group>"; };
 		94F3E2B5240FC2060008A612 /* ViewedMovieTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewedMovieTableViewCell.swift; sourceTree = "<group>"; };
@@ -246,7 +246,7 @@
 			isa = PBXGroup;
 			children = (
 				947C9916240538C800422817 /* MovieDataStore.swift */,
-				94F3E2AE240F96350008A612 /* RealmProvider.swift */,
+				94F3E2AE240F96350008A612 /* RealmFactory.swift */,
 			);
 			path = Persistence;
 			sourceTree = "<group>";
@@ -381,7 +381,7 @@
 		94F3E2AB240F95E50008A612 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				94F3E2AC240F95F20008A612 /* PathProvider.swift */,
+				94F3E2AC240F95F20008A612 /* PathFactory.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -513,10 +513,10 @@
 				94C52687240BD1A500380F4B /* UIView+Extension.swift in Sources */,
 				947C0C2B2404052F001D7391 /* AppDelegate.swift in Sources */,
 				94DB6CCD24091D1D0085A0C6 /* MovieDetailDependencyContainer.swift in Sources */,
-				94F3E2AD240F95F20008A612 /* PathProvider.swift in Sources */,
+				94F3E2AD240F95F20008A612 /* PathFactory.swift in Sources */,
 				947C992824053FDE00422817 /* SearchedKeywordsRepository.swift in Sources */,
 				94C52685240BCEF900380F4B /* UIViewController+Extension.swift in Sources */,
-				94F3E2AF240F96350008A612 /* RealmProvider.swift in Sources */,
+				94F3E2AF240F96350008A612 /* RealmFactory.swift in Sources */,
 				94B125622407BA1400A291D4 /* SearchDependencyContainer.swift in Sources */,
 				94B1256E2407D72800A291D4 /* MagazineCollectionView+Rx.swift in Sources */,
 				94F3E2B6240FC2060008A612 /* ViewedMovieTableViewCell.swift in Sources */,
